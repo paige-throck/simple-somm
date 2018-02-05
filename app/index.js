@@ -5,6 +5,7 @@ const path = require('path');
 const morgan = require('morgan');
 const app = express();
 const port = process.env.PORT || 8888;
+const http = require('http');
 
 
 app.use(bodyParser.json())
@@ -12,20 +13,32 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
 
 
-app.listen
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
 
 
-app.use('/api/posts', require('./routes/posts'))
+// app.use('/api/posts', require('./routes/posts'))
 
 
-app.use('*', function(req, res, next) {
-  res.sendFile('index.html', {root: path.join(__dirname, 'public')})
-})
+// app.use('*', function(req, res, next) {
+//   res.sendFile('index.html', {root: path.join(__dirname, 'public')})
+// })
 
 
-let home = require('/routes/home.js')
-let login = require('/routes/login.js')
-let signup = require('/routes/signup.js')
+// let home = require('/routes/home.js')
+// let login = require('/routes/login.js')
+// let signup = require('/routes/signup.js')
 
 
 // default password = user’s name
