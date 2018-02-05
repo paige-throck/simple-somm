@@ -8,11 +8,11 @@ const knex = require('../db');
 router.get('/:id', function(req, res) {
   const id = req.params.id;
   //knex logic goes here
-  knex('restaurants')
+  knex('users')
   .where('id', id)
-  .then(restaurant => {
+  .then(user => {
 
-    res.render({restaurant:restaurant})
+    res.render({user:user})
 
   }).catch(function(error){
     res.sendStatus(500);
@@ -23,7 +23,7 @@ router.get('/:id', function(req, res) {
 //update ----------------------
 router.put("/:id", function(req, res){
   const id = req.params.id;
-  const updatedRestaurant = {
+  const updatedUser = {
     name: req.body.name,
     city: req.body.city,
     state: req.body.state,
@@ -33,9 +33,9 @@ router.put("/:id", function(req, res){
     email: req.body.email,
   };
   //knex logic
-  knex('restaurants')
+  knex('users')
   .where('id', id)
-  .update(updatedRestaurant)
+  .update(updatedUser)
   .then(() => {
       res.send("update your profile")
   })
@@ -45,7 +45,7 @@ router.put("/:id", function(req, res){
 router.delete('/:id', function(req, res){
   const id = req.params.id;
   //knex logic
-  knex('restaurants')
+  knex('users')
   .where('id', id)
   .del()
   .then(() => {
