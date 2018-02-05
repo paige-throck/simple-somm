@@ -8,12 +8,12 @@ const port = process.env.PORT || 8888;
 const http = require('http');
 
 
-const home = require('/routes/home')
-const login = require('/routes/login')
-const signup = require('/routes/signup')
-const users = require('/routes/users')
-const wines = require('/routes/wines')
-const parings = require('/routes/pairings')
+const home = require('./routes/home')
+const login = require('./routes/login')
+const signup = require('./routes/signup')
+const users = require('./routes/users')
+const wines = require('./routes/wines')
+const pairings = require('./routes/pairings')
 
 
 app.use(bodyParser.json())
@@ -25,7 +25,7 @@ app.use('/login', login);
 app.use('/signup', signup);
 app.use('/users', users);
 app.use('/wines', wines);
-app.use('/parings', pairings;
+app.use('/pairings', pairings);
 
 
 app.set('port', port);
@@ -41,6 +41,8 @@ const server = http.createServer(app);
  */
 
 server.listen(port);
+
+
 
 
 // default password = user’s name
