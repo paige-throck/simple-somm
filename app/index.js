@@ -42,6 +42,8 @@ server.listen(port);
 // let home = require('/routes/home.js')
 // let login = require('/routes/login.js')
 // let signup = require('/routes/signup.js')
+//let wines = require('/routes/wines.js')
+//let parings = require('/routes/pairings.js')
 
 
 // default password = user’s name
