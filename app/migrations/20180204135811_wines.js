@@ -8,6 +8,8 @@ exports.up = function(knex, Promise) {
     table.string('description');
     table.float('price_retail');
     table.integer('vintage');
+    table.string('color');
+    table.string('still_sparkling');
   })
 };
 
