@@ -7,14 +7,26 @@ const app = express();
 const port = process.env.PORT || 8888;
 const http = require('http');
 
-const wines = require('./routes/wines');
+
+const home = require('/routes/home')
+const login = require('/routes/login')
+const signup = require('/routes/signup')
+const users = require('/routes/users')
+const wines = require('/routes/wines')
+const parings = require('/routes/pairings')
 
 
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
 
+app.use('/home', home);
+app.use('/login', login);
+app.use('/signup', signup);
+app.use('/users', users);
 app.use('/wines', wines);
+app.use('/parings', pairings;
+
 
 app.set('port', port);
 
@@ -38,12 +50,6 @@ server.listen(port);
 //   res.sendFile('index.html', {root: path.join(__dirname, 'public')})
 // })
 
-
-// let home = require('/routes/home.js')
-// let login = require('/routes/login.js')
-// let signup = require('/routes/signup.js')
-//let wines = require('/routes/wines.js')
-//let parings = require('/routes/pairings.js')
 
 
 // default password = user’s name
