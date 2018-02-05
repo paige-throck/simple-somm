@@ -2,7 +2,7 @@
   "name": "simple-somm",
   "version": "1.0.0",
   "description": "A full stack iOS/web application for Restaurants looking to create a wine program",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
