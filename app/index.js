@@ -7,11 +7,14 @@ const app = express();
 const port = process.env.PORT || 8888;
 const http = require('http');
 
+const wines = require('./routes/wines');
+
 
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
 
+app.use('/wines', wines);
 
 app.set('port', port);
 
