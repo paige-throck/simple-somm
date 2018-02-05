@@ -5,12 +5,11 @@ exports.up = function(knex, Promise) {
       table.string('name').notNullable();
       table.string('email').notNullable();
       table.string('password').notNullable();
-      table.string('cuisine').notNullable();
+      table.integer('cuisine_id').references('cuisine_lists.id').onDelete('cascade');
       table.string('city');
       table.string('state');
       table.string('address');
       table.integer('zipcode');
-      table.integer('default_id').references('default_lists.id').onDelete('cascade');
     })
 };
 

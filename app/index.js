@@ -4,32 +4,18 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
 const app = express();
-var http = require('http');
 const port = process.env.PORT || 8888;
-
-app.set('port', port);
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-// server.on('error', onError);
-// server.on('listening', onListening);
 
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
 
 
+app.listen
 
-
-
-// app.use('*', function(req, res, next) {
-//   res.sendFile('index.html', {root: path.join(__dirname, 'public')})
-// })
+app.use('*', function(req, res, next) {
+  res.sendFile('index.html', {root: path.join(__dirname, 'public')})
+})
 
 // default password = user’s name
 // app.use(session({

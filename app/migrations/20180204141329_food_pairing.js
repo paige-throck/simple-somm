@@ -1,11 +1,11 @@
 
 exports.up = function(knex, Promise) {
-    return knex.schema.createTableIfNotExists('food_pairing', function(table){
-      table.integer('wine_id').references('wines.id').onDelete('cascade');
-      table.integer('menu_id').references('menu_table.id').onDelete('cascade');
+    return knex.schema.createTableIfNotExists('menu_table', function(table){
+      table.integer('user_id').references('users.id').onDelete('cascade');
+      table.integer('pairing_id').references('food_pairings.id').onDelete('cascade');
   })
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists('food_pairing');
+  return knex.schema.dropTableIfExists('menu_table');
 };
