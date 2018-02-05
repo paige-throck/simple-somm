@@ -43,15 +43,6 @@ const server = http.createServer(app);
 server.listen(port);
 
 
-// app.use('/api/posts', require('./routes/posts'))
-
-
-// app.use('*', function(req, res, next) {
-//   res.sendFile('index.html', {root: path.join(__dirname, 'public')})
-// })
-
-
-
 // default password = user’s name
 // app.use(session({
 //  secret: ‘as2OaDcE63sLd8aiFk4Px’,
