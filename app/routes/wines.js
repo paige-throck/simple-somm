@@ -9,8 +9,11 @@ router.get('/', function(req, res){
 //knex logic
 knex('wines')
 .then((wines) => {
-  res.send(wines);
-  });
+  res.render({wines:wines});
+  }).catch(function (error) {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 //get a single wine------------
@@ -20,8 +23,11 @@ router.get('/:id', function(req, res){
   knex('wines')
   .where('id', id)
   .then((wine) => {
-    res.send(wine)
-  })
+    res.render({wine:wine})
+  }).catch(function (error) {
+      console.log(error);
+      res.sendStatus(500);
+    });
 })
 
 module.exports = router;
