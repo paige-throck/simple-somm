@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     table.string('name');
     table.string('varietal');
     table.string('origin');
-    table.string('description');
+    table.text('description');
     table.float('price_retail');
     table.integer('vintage');
     table.string('color');
