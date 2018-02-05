@@ -18,6 +18,36 @@ app.use('*', function(req, res, next) {
   res.sendFile('index.html', {root: path.join(__dirname, 'public')})
 })
 
+// default password = user’s name
+app.use(session({
+ secret: ‘as2OaDcE63sLd8aiFk4Px’,
+ resave: false,
+ saveUninitialized: true,
+ cookie: {
+   secure: false
+ }
+}));
+
+app.use(function(req, res, next) {
+ console.log(‘Session is: ’, req.session);
+ next();
+});
+
+
+app.use(loginRoute);
+app.use(signupRoutes);
+
+
+app.use(function(req, res, next) {
+ if(!req.session.username) {
+   console.log(‘redirecting’);
+   res.redirect(‘/’)
+ } else {
+   console.log(‘not redirecting’);
+   next();
+ }
+});
+
 app.use(function(req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
