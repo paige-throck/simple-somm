@@ -14,6 +14,7 @@ const signup = require('./routes/signup')
 const users = require('./routes/users')
 const wines = require('./routes/wines')
 const pairings = require('./routes/pairings')
+const wineList = require('./routes/wineList')
 
 
 app.use(bodyParser.json())
@@ -26,6 +27,7 @@ app.use('/signup', signup);
 app.use('/users', users);
 app.use('/wines', wines);
 app.use('/pairings', pairings);
+app.use('/wineList', wineList);
 
 
 app.set('port', port);
