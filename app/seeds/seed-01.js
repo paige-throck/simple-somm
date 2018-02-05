@@ -70,7 +70,6 @@ exports.seed = function(knex, Promise) {
 
 {name: "Principe Pallavicini Poggio Verde Frascati Superiore ", varietal: "Frscati", origin: "Lazio, Italy", description: "Bright, brilliant straw yellow. Broad and intense nose with notes of blossoms and tropical fruit. Full, soft palate with lingering aftertaste.", price_retail:12.99 , vintage:2015 , color: "White", still_sparkling: "Still"},
 
-      return knex('table_name').insert([
       ]);
     });
 };
