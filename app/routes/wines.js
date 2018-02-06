@@ -9,7 +9,7 @@ router.get('/', function(req, res){
 //knex logic
 knex('wines')
 .then((wines) => {
-  res.render({wines:wines});
+  res.json(wines);
   }).catch(function (error) {
       console.log(error);
       res.sendStatus(500);
@@ -23,7 +23,7 @@ router.get('/:id', function(req, res){
   knex('wines')
   .where('id', id)
   .then((wine) => {
-    res.render({wine:wine})
+    res.json({wine:wine})
   }).catch(function (error) {
       console.log(error);
       res.sendStatus(500);
