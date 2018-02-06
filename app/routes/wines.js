@@ -9,6 +9,7 @@ router.get('/', function(req, res){
 //knex logic
 knex('wines')
 .then((wines) => {
+res.header("Access-Control-Allow-Origin", "*");
   res.json(wines);
   }).catch(function (error) {
       console.log(error);

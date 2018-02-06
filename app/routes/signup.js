@@ -9,10 +9,12 @@ const salt = bcrypt.genSaltSync(8);
 
 //For new users, we need to get cuisine_lists and render the object with cuisine id and cuisine name, the id is passed into the user once the post is triggered. Once the new user is inserted we to grab the id, select all wine_ids based on that cuisine_id and then insert the ids into the wine_list table along with the user_id
 
-router.get('/signup', function(req, res) {
+router.get('/', function(req, res) {
+
   knex('cuisine_lists')
   .then((cuisineArr) => {
-    res.render({cuisine:cuisineArr});
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json(cuisineArr);
     }).catch(function (error) {
         console.log(error);
         res.sendStatus(500);
@@ -45,7 +47,7 @@ router.post('/signup', function(req, res, next) {
       req.session.userid = userId[0];
       console.log('This is the session object:', req.session);
       console.log('User id:', userId);
-
+      console.log("you did it!")
       res.redirect('/users');
     })
     .catch(function(err) {
@@ -55,7 +57,6 @@ router.post('/signup', function(req, res, next) {
       }
       res.sendStatus(500);
     });
-
 })
 
 
