@@ -9,6 +9,9 @@ const app = express();
 const port = process.env.PORT || 8888;
 const http = require('http');
 
+const cors = require('cors')
+const expressCors = require('express-cors')
+
 
 const home = require('./routes/home')
 const login = require('./routes/login')
@@ -22,6 +25,14 @@ const wineList = require('./routes/wineList')
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
+app.use(cors())
+app.use(expressCors({
+  allowedOrigins: [
+    'http://localhost:3000/'
+  ]
+}))
+
+
 
 app.use('/', home);
 app.use('/login', login);
