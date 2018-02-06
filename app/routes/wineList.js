@@ -4,4 +4,4 @@ const router = express.Router();
 const knex = require('../db');
 
 
-module.exports = router;
+module.exports = router

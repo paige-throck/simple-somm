@@ -7,27 +7,14 @@ const knex = require('../db');
 router.get('/', function(req, res){
 
 //knex logic
-knex('wines')
-.then((wines) => {
-  res.render({wines:wines});
-  }).catch(function (error) {
-      console.log(error);
-      res.sendStatus(500);
-    });
+
 });
 
 //get a single wine------------
 router.get('/:id', function(req, res){
   const id = req.params.id;
   //knex logic
-  knex('wines')
-  .where('id', id)
-  .then((wine) => {
-    res.render({wine:wine})
-  }).catch(function (error) {
-      console.log(error);
-      res.sendStatus(500);
-    });
+
 })
 
 module.exports = router;
