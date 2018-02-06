@@ -1,5 +1,6 @@
 const express = require('express');
-const router = express.Router();
+const router = express.router();
+//this may need to change depending on what we do with the db file
 const knex = require('../db');
 
 //Restaurant route---------------
@@ -7,11 +8,11 @@ const knex = require('../db');
 router.get('/:id', function(req, res) {
   const id = req.params.id;
   //knex logic goes here
-  knex('users')
+  knex('restaurants')
   .where('id', id)
-  .then(user => {
+  .then(restaurant => {
 
-    res.render({user:user})
+    res.render({restaurant:restaurant})
 
   }).catch(function(error){
     res.sendStatus(500);
@@ -22,7 +23,7 @@ router.get('/:id', function(req, res) {
 //update ----------------------
 router.put("/:id", function(req, res){
   const id = req.params.id;
-  const updatedUser = {
+  const updatedRestaurant = {
     name: req.body.name,
     city: req.body.city,
     state: req.body.state,
@@ -32,9 +33,9 @@ router.put("/:id", function(req, res){
     email: req.body.email,
   };
   //knex logic
-  knex('users')
+  knex('restaurants')
   .where('id', id)
-  .update(updatedUser)
+  .update(updatedRestaurant)
   .then(() => {
       res.send("update your profile")
   })
@@ -44,11 +45,10 @@ router.put("/:id", function(req, res){
 router.delete('/:id', function(req, res){
   const id = req.params.id;
   //knex logic
-  knex('users')
+  knex('restaurants')
   .where('id', id)
   .del()
   .then(() => {
     res.send('DELETED')
   })
 })
-module.exports = router;
