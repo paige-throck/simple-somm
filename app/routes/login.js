@@ -16,10 +16,10 @@ router.get('/', function(req, res) {
 
 router.post('/', (req, res) => {
   let userObj = req.body;
-  console.log(userObj);
+  console.log(userObj, "userObj");
   knex.select('*').from('users').where('email', userObj.email)
   .then((result) => {
-    console.log(result);
+    console.log(result, "Result");
     if (result.length===0) {
       return res.send('no account with that email');
     }
@@ -27,6 +27,8 @@ router.post('/', (req, res) => {
     .then ((loginCheck) => {
       if (loginCheck) { // If the passwords match, login.
         res.cookie('user', '1', { maxAge: 900000, httpOnly: true });
+        console.log(result[0].id);
+        console.log(req.session);
         req.session.userID = result[0].id;
         console.log('Passwords Match ', req.session);
 
