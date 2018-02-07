@@ -17,11 +17,12 @@ router.get('/', function(req, res) {
   .then((cuisineArr) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.json(cuisineArr);
-    }).catch(function (error) {
+    })
+    .catch(function (error) {
         console.log(error);
         res.sendStatus(500);
       })
-  })
+})
 
 router.post('/', (req, res)=> {
   console.log(req.body);
@@ -57,10 +58,6 @@ router.post('/', (req, res)=> {
       res.sendStatus(500);
     })
   });
-
-
-
-
 
 
 
