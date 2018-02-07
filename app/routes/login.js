@@ -41,11 +41,11 @@ router.post('/', function(req, res, next) {
       // error if password entered does not match password in database
       if(!bcrypt.compareSync(req.body.password, user.password)) throw 400;
       console.log('Password is valid');
-
+      console.log();
       req.session.email = user.email;
       req.session.userid = user.id;
-
-      res.sendStatus(200);
+      
+      res.json(user);
     })
     .catch(function(err) {
       console.log(err);
@@ -54,9 +54,6 @@ router.post('/', function(req, res, next) {
 
 })
 
-router.get('/loggedin',restrict,function(req,res){
-res.send(true);
-});
 
 
 
