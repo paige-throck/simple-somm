@@ -27,6 +27,7 @@ router.get('/', function(req, res) {
 router.post('/', (req, res)=> {
   console.log(req.body);
   let newUserObj = req.body;
+  let userId = req.body.id;
   knex.select('email').from('users').where('email', newUserObj.email)
   .then((result)=>{
     if (result.length !== 0) {
@@ -45,6 +46,7 @@ router.post('/', (req, res)=> {
           zipcode: newUserObj.zipcode
         })
     .then((usersData) => {
+      console.log(usersData, 'userid');
       res.header("Access-Control-Allow-Methods", "*");
       res.header("Access-Control-Allow-Origin", "*");
     })

@@ -1,4 +1,4 @@
-
+'use strict';
 
 const express = require('express');
 const session = require('express-session');
@@ -16,7 +16,7 @@ const expressCors = require('express-cors')
 const home = require('./routes/home')
 const login = require('./routes/login')
 const signup = require('./routes/signup')
-const users = require('./routes/users')
+const profiles = require('./routes/profiles')
 const wines = require('./routes/wines')
 const pairings = require('./routes/pairings')
 const wineList = require('./routes/wineList')
@@ -42,27 +42,31 @@ app.use(session({
   }
 }));
 
+app.all('*',function(req, res, next){
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+
+});
+
 
 app.use('/', home);
 app.use('/login', login);
 app.use('/signup', signup);
-app.use('/users', users);
+app.use('/profiles', profiles);
 app.use('/wines', wines);
 app.use('/pairings', pairings);
 app.use('/wineList', wineList);
 
 
 app.set('port', port);
-
-/**
- * Create HTTP server.
- */
+ // Create HTTP server.
 
 const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+// Listen on provided port, on all network interfaces.
 
 server.listen(port);
 

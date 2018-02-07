@@ -7,42 +7,56 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(8);
 
+// filterInt - The function from MDN that confirms a particular value is actually an integer. Because parseInt isn't quite strict enough.
+const filterInt = function(value) {
+  if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+    return Number(value);
+  return NaN;
+};
 
-router.get('/', function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
+function restrict(req,res,next){
+try{
+  if(req.session.email){
+    next();
+  }else{
+    res.send('failed');
+    res.end();
+  }
+}
+catch(err){
+  res.send('failed');
+  res.end();
+}
+};
+
+
+router.post('/', function(req, res, next) {
+  console.log('Received login info:', req.body);
+  knex('users')
+    .where('email', req.body.email)
+    .then(function(usersData) {
+      user = usersData[0];
+      console.log('Found user in database', user);
+
+      // error if password entered does not match password in database
+      if(!bcrypt.compareSync(req.body.password, user.password)) throw 400;
+      console.log('Password is valid');
+
+      req.session.email = user.email;
+      req.session.userid = user.id;
+
+      res.sendStatus(200);
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.sendStatus(500);
+    });
+
 })
 
-
-
-router.post('/', (req, res) => {
-  let userObj = req.body;
-  console.log(userObj, "userObj");
-  knex.select('*').from('users').where('email', userObj.email)
-  .then((result) => {
-    console.log(result, "Result");
-    if (result.length===0) {
-      return res.send('no account with that email');
-    }
-    return bcrypt.compare(userObj.password, result[0].password)
-    .then ((loginCheck) => {
-      if (loginCheck) { // If the passwords match, login.
-        res.cookie('user', '1', { maxAge: 900000, httpOnly: true });
-        console.log(result[0].id);
-        console.log(req.session);
-        req.session.userID = result[0].id;
-        console.log('Passwords Match ', req.session);
-
-        res.header("Access-Control-Allow-Origin", "*");
-        return (req.session)
-      }
-
-      else { // If passwords don't match, send a 401.
-        return res.sendStatus(401);
-      }
-    })
-  })
+router.get('/loggedin',restrict,function(req,res){
+res.send(true);
 });
-
 
 
 
