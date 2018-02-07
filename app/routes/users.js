@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../db');
 
-//Restaurant route---------------
+//Profile route---------------
 
 router.get('/:id', function(req, res) {
   const id = req.params.id;

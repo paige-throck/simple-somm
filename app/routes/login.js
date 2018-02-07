@@ -25,21 +25,21 @@ router.post('/', (req, res) => {
     }
     return bcrypt.compare(userObj.password, result[0].password)
     .then ((loginCheck) => {
-      if (loginCheck) { // If the passwords match, login and redirect to their bits page.
+      if (loginCheck) { // If the passwords match, login.
         res.cookie('user', '1', { maxAge: 900000, httpOnly: true });
         req.session.userID = result[0].id;
         console.log('Passwords Match ', req.session);
 
         res.header("Access-Control-Allow-Origin", "*");
-        // return res.redirect(`/performances/${req.session.userID}`);
-      } else { // If passwords don't match, send a 401.
+        return (req.session)
+      }
+
+      else { // If passwords don't match, send a 401.
         return res.sendStatus(401);
       }
     })
   })
 });
-
-
 
 
 
