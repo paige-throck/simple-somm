@@ -7,7 +7,11 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(8);
 
-
+const filterInt = function(value) {
+  if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+    return Number(value);
+  return NaN;
+};
 
 //For new users, we need to get cuisine_lists and render the object with cuisine id and cuisine name, the id is passed into the user once the post is triggered. Once the new user is inserted we to grab the id, select all wine_ids based on that cuisine_id and then insert the ids into the wine_list table along with the user_id
 
@@ -27,7 +31,7 @@ router.get('/', function(req, res) {
 router.post('/', (req, res)=> {
   console.log(req.body);
   let newUserObj = req.body;
-  let userId = req.body.id;
+
   knex.select('email').from('users').where('email', newUserObj.email)
   .then((result)=>{
     if (result.length !== 0) {
@@ -35,18 +39,32 @@ router.post('/', (req, res)=> {
     }
     return bcrypt.hash(newUserObj.password, 10, (err, hash) => {
         newUserObj.hashpw = hash;
-        knex('users').returning('id').insert({
+        knex('users').returning('*').insert({
           email : newUserObj.email,
           password : newUserObj.hashpw,
           name: newUserObj.name,
-          cuisine_id: newUserObj.cuisine_id,
+          cuisine_id: filterInt(newUserObj.cuisine_id),
           city: newUserObj.city,
           state: newUserObj.state,
           address: newUserObj.address,
           zipcode: newUserObj.zipcode
         })
     .then((usersData) => {
-      console.log(usersData, 'userid');
+      let data = usersData[0]
+      console.log(usersData[0].cuisine_id, 'data to work with');
+
+      return knex('wine_lists')
+      .innerJoin('users', 'users.id', 'wine_lists.user_id')
+      .innerJoin('cuisine_lists', 'users.cuisine_id', 'cuisine_lists.id')
+      .select('cuisine_list.wine_ids')
+      .insert({
+        user_id: data.id,
+        wine_ids: [cuisine_lists.wine_ids]
+      })
+      .then(()=>{
+        console.log('did it work?');
+      })
+
       res.header("Access-Control-Allow-Methods", "*");
       res.header("Access-Control-Allow-Origin", "*");
     })
