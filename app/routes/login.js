@@ -8,37 +8,36 @@ const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(8);
 
 
-router
-.use(function(req, res, next) {
-  console.log('In the login route:', req.body);
-  next();
+router.get('/', function(req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
 })
-.post('/', function(req, res, next) {
-  console.log('Received login info:', req.body);
-  knex('users')
-    .where('username', req.body.username)
-    .then(function(usersData) {
-      user = usersData[0];
-      console.log('Found user in database', user);
 
-      // error if password entered does not match password in database
-      if(!bcrypt.compareSync(req.body.password, user.password)) throw 400;
-      console.log('Password is valid');
 
-      req.session.username = user.username;
-      req.session.userid = user.id;
 
-      res.redirect('/restaurants');
-    })
-    .catch(function(err) {
-      console.log(err);
-      if (err) {
-        res.redirect('/');
+router.post('/', (req, res) => {
+  let userObj = req.body;
+  console.log(userObj);
+  knex.select('*').from('users').where('email', userObj.email)
+  .then((result) => {
+    console.log(result);
+    if (result.length===0) {
+      return res.send('no account with that email');
+    }
+    return bcrypt.compare(userObj.password, result[0].password)
+    .then ((loginCheck) => {
+      if (loginCheck) { // If the passwords match, login and redirect to their bits page.
+        res.cookie('user', '1', { maxAge: 900000, httpOnly: true });
+        req.session.userID = result[0].id;
+        console.log('Passwords Match ', req.session);
+
+        res.header("Access-Control-Allow-Origin", "*");
+        // return res.redirect(`/performances/${req.session.userID}`);
+      } else { // If passwords don't match, send a 401.
+        return res.sendStatus(401);
       }
-      res.sendStatus(500);
-    });
-
-})
+    })
+  })
+});
 
 
 
