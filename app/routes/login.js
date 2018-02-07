@@ -7,16 +7,33 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(8);
 
+// filterInt - The function from MDN that confirms a particular value is actually an integer. Because parseInt isn't quite strict enough.
+const filterInt = function(value) {
+  if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+    return Number(value);
+  return NaN;
+};
 
-router
-.use(function(req, res, next) {
-  console.log('In the login route:', req.body);
-  next();
-})
-.post('/', function(req, res, next) {
+function restrict(req,res,next){
+try{
+  if(req.session.email){
+    next();
+  }else{
+    res.send('failed');
+    res.end();
+  }
+}
+catch(err){
+  res.send('failed');
+  res.end();
+}
+};
+
+
+router.post('/', function(req, res, next) {
   console.log('Received login info:', req.body);
   knex('users')
-    .where('username', req.body.username)
+    .where('email', req.body.email)
     .then(function(usersData) {
       user = usersData[0];
       console.log('Found user in database', user);
@@ -24,23 +41,18 @@ router
       // error if password entered does not match password in database
       if(!bcrypt.compareSync(req.body.password, user.password)) throw 400;
       console.log('Password is valid');
-
-      req.session.username = user.username;
+      req.session.email = user.email;
       req.session.userid = user.id;
 
-      res.redirect('/restaurants');
+      res.json(user);
+      console.log('sending user', user);
     })
     .catch(function(err) {
       console.log(err);
-      if (err) {
-        res.redirect('/');
-      }
       res.sendStatus(500);
     });
 
 })
-
-
 
 
 

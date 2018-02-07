@@ -1,22 +1,26 @@
 const express = require('express');
 const router = express.Router();
-//this may need to change depending on what we do with the db file
 const knex = require('../db');
 
-//Restaurant route---------------
+// filterInt - The function from MDN that confirms a particular value is actually an integer. Because parseInt isn't quite strict enough.
+const filterInt = function(value) {
+  if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+    return Number(value);
+  return NaN;
+};
 
-router.get('/:id', function(req, res) {
-  const id = req.params.id;
-  //knex logic goes here
-  knex('users')
-  .where('id', id)
-  .then(user => {
+//Profile route---------------
 
-    res.render({user:user})
+router.get('/:id' , (req, res, next) => {
+  console.log("profile get request");
+  let sessionID = filterInt(req.session.userID);
+  let paramsID = filterInt(req.params.id);
 
-  }).catch(function(error){
-    res.sendStatus(500);
-  })
+    knex('users').where('id', paramsID)
+    .then((user)=> {
+      console.log(user);
+      res.json(user);
+  });
 });
 
 

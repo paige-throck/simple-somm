@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -7,75 +9,67 @@ const app = express();
 const port = process.env.PORT || 8888;
 const http = require('http');
 
+const cors = require('cors')
+const expressCors = require('express-cors')
+
 
 const home = require('./routes/home')
 const login = require('./routes/login')
 const signup = require('./routes/signup')
-const users = require('./routes/users')
+const profiles = require('./routes/profiles')
 const wines = require('./routes/wines')
-const pairings = require('./routes/pairings')
-const wineList = require('./routes/wineList')
+
+
 
 
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
+app.use(cors())
+app.use(expressCors({
+  allowedOrigins: [
+    'http://localhost:3000/'
+  ]
+}))
 
-app.use('/home', home);
+//Setting up session
+app.use(session({
+  secret: 'drinking all the wine',
+  resave: false,
+  saveUninitialized: true,
+  cookie : {
+    secure : false
+  }
+}));
+
+app.all('*',function(req, res, next){
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+
+});
+
+
+app.use('/', home);
 app.use('/login', login);
 app.use('/signup', signup);
-app.use('/users', users);
+app.use('/profiles', profiles);
 app.use('/wines', wines);
-app.use('/pairings', pairings);
-app.use('/wineList', wineList);
+
+
 
 
 app.set('port', port);
-
-/**
- * Create HTTP server.
- */
+ // Create HTTP server.
 
 const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+// Listen on provided port, on all network interfaces.
 
 server.listen(port);
 
-
-
-
-// default password = user’s name
-// app.use(session({
-//  secret: ‘as2OaDcE63sLd8aiFk4Px’,
-//  resave: false,
-//  saveUninitialized: true,
-//  cookie: {
-//    secure: false
-//  }
-// }));
-
-// app.use(function(req, res, next) {
-//  console.log(‘Session is: ’, req.session);
-//  next();
-// });
-
-
-// app.use(loginRoute);
-// app.use(signupRoutes);
-
-
-// app.use(function(req, res, next) {
-//  if(!req.session.username) {
-//    console.log(‘redirecting’);
-//    res.redirect(‘/’)
-//  } else {
-//    console.log(‘not redirecting’);
-//    next();
-//  }
-// });
 
 
 app.use(function(req, res, next) {

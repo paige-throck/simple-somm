@@ -3,13 +3,23 @@ const router = express.Router();
 //this may need to change depending on what we do with the db file
 const knex = require('../db');
 
+// filterInt - The function from MDN that confirms a particular value is actually an integer. Because parseInt isn't quite strict enough.
+const filterInt = function(value) {
+  if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+    return Number(value);
+  return NaN;
+};
+
+
+
 //get all wines for the search function----------------------
 router.get('/', function(req, res){
 
 //knex logic
 knex('wines')
 .then((wines) => {
-  res.render({wines:wines});
+res.header("Access-Control-Allow-Origin", "*");
+  res.json(wines);
   }).catch(function (error) {
       console.log(error);
       res.sendStatus(500);
@@ -23,7 +33,7 @@ router.get('/:id', function(req, res){
   knex('wines')
   .where('id', id)
   .then((wine) => {
-    res.render({wine:wine})
+    res.json({wine:wine})
   }).catch(function (error) {
       console.log(error);
       res.sendStatus(500);
