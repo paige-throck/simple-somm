@@ -18,7 +18,7 @@ router.get('/:id' , (req, res, next) => {
 
     knex('users').where('id', paramsID)
     .then((user)=> {
-      console.log(user);
+      console.log(user, 'this is the user!!!!!!!');
       res.json(user);
   });
 });

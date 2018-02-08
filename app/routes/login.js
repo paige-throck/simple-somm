@@ -43,8 +43,10 @@ router.post('/', function(req, res, next) {
       console.log('Password is valid');
       req.session.email = user.email;
       req.session.userid = user.id;
+      let resId = req.session.userid
+      console.log(req.session.userid, 'session id' );
 
-      res.json(user);
+      return res.redirect(`/profiles/${resId}`)
       console.log('sending user', user);
     })
     .catch(function(err) {
