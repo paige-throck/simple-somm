@@ -53,13 +53,17 @@ router.post('/', (req, res)=> {
       let data = usersData[0]
       console.log(usersData[0].cuisine_id, 'data to work with');
 
-      return knex('wine_lists')
-      .innerJoin('users', 'users.id', 'wine_lists.user_id')
-      .innerJoin('cuisine_lists', 'users.cuisine_id', 'cuisine_lists.id')
-      .select('cuisine_list.wine_ids')
-      .insert({
-        user_id: data.id,
-        wine_ids: [cuisine_lists.wine_ids]
+      return knex('cuisine_lists')
+      .returning('*')
+      .then((cuisine)=>{
+        let cuisineData = cuisine[0]
+        return knex('wine_lists')
+        .innerJoin('users', 'users.id', 'wine_lists.user_id')
+        .innerJoin('cuisine_lists', 'users.cuisine_id', 'cuisine_lists.id')
+        .insert({
+          user_id: data.id,
+          wine_ids: cuisineData.wine_ids
+        })
       })
       .then(()=>{
         console.log('did it work?');
