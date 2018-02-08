@@ -59,8 +59,6 @@ app.use('/profiles', profiles);
 app.use('/wines', wines);
 
 
-
-
 app.set('port', port);
  // Create HTTP server.
 
@@ -70,13 +68,19 @@ const server = http.createServer(app);
 
 server.listen(port);
 
-
-
 app.use(function(req, res, next) {
   var err = new Error('Not Found')
   err.status = 404
   next(err)
 })
+
+app.get('/', (req, res, next) => {
+  if (req.session.userID) {
+    res.redirect(`/profiles/${req.session.userID}`);
+  } else {
+    next();
+  }
+});
 
 
 app.use(function(err, req, res, next) {

@@ -15,13 +15,24 @@ router.get('/:id' , (req, res, next) => {
   console.log("profile get request");
   let sessionID = filterInt(req.session.userID);
   let paramsID = filterInt(req.params.id);
-
+  
     knex('users').where('id', paramsID)
     .then((user)=> {
       console.log(user, 'this is the user!!!!!!!');
       res.json(user);
-  });
+      });
 });
+
+
+// router.get('/:id/winelist', (req, res, next)=>{
+//   const id = filterInt(req.params.id);
+//   knex('wine_lists')
+//   .select('wine_ids')
+//   .where(id, 'user_id')
+//   .then((wine_ids)=>{
+//     console.log();
+//   })
+// })
 
 
 //update ----------------------
