@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const knex = require('../db');
+const session = require('express-session');
 
 // filterInt - The function from MDN that confirms a particular value is actually an integer. Because parseInt isn't quite strict enough.
 const filterInt = function(value) {
@@ -12,15 +13,18 @@ const filterInt = function(value) {
 //Profile route---------------
 
 router.get('/:id' , (req, res, next) => {
-  console.log("profile get request");
+  
   let sessionID = filterInt(req.session.userID);
   let paramsID = filterInt(req.params.id);
-  
-    knex('users').where('id', paramsID)
-    .then((user)=> {
-      console.log(user, 'this is the user!!!!!!!');
-      res.json(user);
-      });
+  console.log('The session ID - ', req.session.userID);
+  console.log('The user ID - ', req.params.id);
+  if (sessionID === paramsID) {
+    console.log('params ID and user ID match.');
+    next();
+  } else {
+    console.log(`params ID and user ID don't match.`);
+    res.redirect('/');
+  }
 });
 
 

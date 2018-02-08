@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(8);
 
+const session = require('express-session');
+
 // filterInt - The function from MDN that confirms a particular value is actually an integer. Because parseInt isn't quite strict enough.
 const filterInt = function(value) {
   if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
@@ -30,31 +32,54 @@ catch(err){
 };
 
 
-router.post('/', function(req, res, next) {
-  console.log('Received login info:', req.body);
-  knex('users')
-    .where('email', req.body.email)
-    .then(function(usersData) {
-      user = usersData[0];
-      console.log('Found user in database', user);
+// router.post('/', function(req, res, next) {
+//   console.log('Received login info:', req.body);
+//   knex('users')
+//     .where('email', req.body.email)
+//     .then(function(usersData) {
+//       user = usersData[0];
+//       console.log('Found user in database', user);
+//
+//       // error if password entered does not match password in database
+//       if(!bcrypt.compareSync(req.body.password, user.password)) throw 400;
+//       console.log('Password is valid');
+//       req.session.email = user.email;
+//       req.session.userid = user.id;
+//       let resId = req.session.userid
+//       console.log(req.session.userid, 'session id' );
+//
+//       return res.redirect(`/profiles/${resId}`)
+//       console.log('sending user', user);
+//     })
+//     .catch(function(err) {
+//       console.log(err);
+//       res.sendStatus(500);
+//     });
+//
+// })
 
-      // error if password entered does not match password in database
-      if(!bcrypt.compareSync(req.body.password, user.password)) throw 400;
-      console.log('Password is valid');
-      req.session.email = user.email;
-      req.session.userid = user.id;
-      let resId = req.session.userid
-      console.log(req.session.userid, 'session id' );
-
-      return res.redirect(`/profiles/${resId}`)
-      console.log('sending user', user);
+router.post('/', (req, res) => {
+  let userObj = req.body;
+  console.log(userObj);
+  knex.select('*').from('users').where('email', userObj.email)
+  .then((result) => {
+    console.log(result);
+    if (result.length===0) {
+      return res.send('no account with that email');
+    }
+    return bcrypt.compare(userObj.password, result[0].password)
+    .then ((loginCheck) => {
+      if (loginCheck) { // If the passwords match, login and redirect to their bits page.
+        res.cookie('user', '1', { maxAge: 900000, httpOnly: true });
+        req.session.userID = result[0].id;
+        console.log('Passwords Match ', req.session.userID);
+        return res.redirect(`/profiles/${req.session.userID}`);
+      } else { // If passwords don't match, send a 401.
+        return res.sendStatus(401);
+      }
     })
-    .catch(function(err) {
-      console.log(err);
-      res.sendStatus(500);
-    });
-
-})
+  })
+});
 
 
 

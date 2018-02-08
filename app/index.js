@@ -5,9 +5,11 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+// const jwt = require("jsonwebtoken");
 const app = express();
 const port = process.env.PORT || 8888;
 const http = require('http');
+
 
 const cors = require('cors')
 const expressCors = require('express-cors')
@@ -25,6 +27,7 @@ const wines = require('./routes/wines')
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
+app.use(morgan("dev"));
 app.use(cors())
 app.use(expressCors({
   allowedOrigins: [
@@ -38,7 +41,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie : {
-    secure : false
+    secure : true
   }
 }));
 
@@ -74,13 +77,13 @@ app.use(function(req, res, next) {
   next(err)
 })
 
-app.get('/', (req, res, next) => {
-  if (req.session.userID) {
-    res.redirect(`/profiles/${req.session.userID}`);
-  } else {
-    next();
-  }
-});
+// app.get('/', (req, res, next) => {
+//   if (req.session.userID) {
+//     res.redirect(`/profiles/${req.session.userID}`);
+//   } else {
+//     next();
+//   }
+// });
 
 
 app.use(function(err, req, res, next) {
