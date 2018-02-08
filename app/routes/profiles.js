@@ -13,7 +13,7 @@ const filterInt = function(value) {
 //Profile route---------------
 
 router.get('/:id' , (req, res, next) => {
-  
+
   let sessionID = filterInt(req.session.userID);
   let paramsID = filterInt(req.params.id);
   console.log('The session ID - ', req.session.userID);

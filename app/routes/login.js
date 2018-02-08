@@ -63,7 +63,7 @@ router.post('/', (req, res) => {
   console.log(userObj);
   knex.select('*').from('users').where('email', userObj.email)
   .then((result) => {
-    console.log(result);
+    console.log(result, "login post result");
     if (result.length===0) {
       return res.send('no account with that email');
     }
@@ -71,9 +71,15 @@ router.post('/', (req, res) => {
     .then ((loginCheck) => {
       if (loginCheck) { // If the passwords match, login and redirect to their bits page.
         res.cookie('user', '1', { maxAge: 900000, httpOnly: true });
-        req.session.userID = result[0].id;
-        console.log('Passwords Match ', req.session.userID);
-        return res.redirect(`/profiles/${req.session.userID}`);
+        req.session.user_id = result[0].id;
+        req.session.email = result[0].email;
+
+
+        console.log('Session id', req.session.id);
+
+        // return res.redirect(`/profiles/${req.session.userID}`);
+        res.send({id: req.session.user_id, email: req.session.email})
+
       } else { // If passwords don't match, send a 401.
         return res.sendStatus(401);
       }
