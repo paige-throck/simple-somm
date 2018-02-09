@@ -26,23 +26,6 @@ router.get('/:id', (req, res, next) => {
 })
 
 
-
-// router.get('/:id' , (req, res, next) => {
-//
-//   let sessionID = filterInt(req.session.userID);
-//   let paramsID = filterInt(req.params.id);
-//   console.log('The session ID - ', req.session.userID);
-//   console.log('The user ID - ', req.params.id);
-//   if (sessionID === paramsID) {
-//     console.log('params ID and user ID match.');
-//     next();
-//   } else {
-//     console.log(`params ID and user ID don't match.`);
-//     res.redirect('/');
-//   }
-// });
-
-
 router.get('/:id/winelist', (req, res, next) => {
     let winesArr = [];
     const id = filterInt(req.params.id);
@@ -73,6 +56,8 @@ router.get('/:id/winelist', (req, res, next) => {
         })
 
 })
+
+
 
 
 
