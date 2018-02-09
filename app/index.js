@@ -21,6 +21,7 @@ const signup = require('./routes/signup')
 const profiles = require('./routes/profiles')
 const wines = require('./routes/wines')
 
+
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
