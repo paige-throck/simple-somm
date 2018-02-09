@@ -49,7 +49,9 @@ router.get('/:id/winelist', (req, res, next) => {
                     })
             })).then((response) => {
 
-                res.send({response: winesArr})
+                res.send({
+                    response: winesArr
+                })
                 console.log(winesArr, 'arararararayyyyy');
             })
 

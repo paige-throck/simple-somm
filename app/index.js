@@ -28,22 +28,22 @@ app.use(express.static(path.join(__dirname, '/../', 'node_modules')))
 app.use(morgan("dev"));
 app.use(cors())
 app.use(expressCors({
-  allowedOrigins: [
-    'http://localhost:3000/'
-  ]
+    allowedOrigins: [
+        'http://localhost:3000/'
+    ]
 }))
 
 //Setting up session
 app.use(session({
-  secret: 'drinking all the wine',
-  resave: false,
-  saveUninitialized: true,
-  cookie : {
-    secure : true
-  }
+    secret: 'drinking all the wine',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: true
+    }
 }));
 
-app.all('*',function(req, res, next){
+app.all('*', function(req, res, next) {
 
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
@@ -61,7 +61,7 @@ app.use('/wines', wines);
 
 
 app.set('port', port);
- // Create HTTP server.
+// Create HTTP server.
 
 const server = http.createServer(app);
 
@@ -70,26 +70,26 @@ const server = http.createServer(app);
 server.listen(port);
 
 app.use(function(req, res, next) {
-  var err = new Error('Not Found')
-  err.status = 404
-  next(err)
+    var err = new Error('Not Found')
+    err.status = 404
+    next(err)
 })
 
 app.get('/', (req, res, next) => {
-  if (req.session.userID) {
-    res.redirect(`/profiles/${req.session.userID}`);
-  } else {
-    next();
-  }
+    if (req.session.userID) {
+        res.redirect(`/profiles/${req.session.userID}`);
+    } else {
+        next();
+    }
 });
 
 
 app.use(function(err, req, res, next) {
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
-  console.log(err)
-  res.status(err.status || 500)
-  res.json(err)
+    res.locals.message = err.message
+    res.locals.error = req.app.get('env') === 'development' ? err : {}
+    console.log(err)
+    res.status(err.status || 500)
+    res.json(err)
 })
 
 
